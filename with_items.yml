@@ -1,0 +1,15 @@
+- name: replace
+  hosts: localhost
+  connection: local
+  gather_facts: flase
+  tasks:
+   - lineinfile:
+      path: test.txt
+      #regexp: '^METADATA_ODA='
+      #line: 'METADATA_ODA=1239d'
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+     with_items:
+       - { regexp: '^sys_host=' , line: 'sys_host=localhost' }
+       - { regexp: '^mem_host=' , line: 'mem_host=localhost' }
+       - { regexp: '^local_host=' , line: 'local_host=localhost' }

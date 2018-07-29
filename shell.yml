@@ -1,0 +1,13 @@
+---
+- name: Working with extra variables - Multiple vars
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+
+  - name: Multiple extra variables test
+    debug:
+     msg: "V: {{ my_var1 }}; Vr2: {{ my_var2 }}"
+  - name: Execute the script
+    command: sh shell.sh {{ my_var1 }}  {{ my_var2 }}
