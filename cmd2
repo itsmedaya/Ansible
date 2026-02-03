@@ -1,0 +1,77 @@
+Execution Control Commands
+--start-at-task="TASK NAME"  
+Resume playbook from a specific task.
+
+--step  
+Run playbook interactively, asking before each task.
+
+--tags / --skip-tags  
+Run only tasks with certain tags or skip them.
+
+bash
+ansible-playbook site.yml --tags "deploy"
+ansible-playbook site.yml --skip-tags "cleanup"
+--limit  
+Restrict execution to specific hosts.
+
+bash
+ansible-playbook site.yml --limit web01
+--check  
+Dry-run mode (no changes applied, just shows what would happen).
+
+--diff  
+Show differences when files/templates change.
+
+
+
+Debugging & Verbosity
+-v, -vv, -vvv  
+Increase verbosity for debugging.
+
+bash
+ansible-playbook site.yml -vvv
+--list-hosts  
+Show which hosts will be affected.
+
+Show all tasks in the playbook.
+
+--list-tags  
+Show available tags.
+
+⚡ Performance & Parallelism
+-f <N>  
+Forks: run tasks in parallel across N hosts.
+
+bash
+ansible-playbook site.yml -f 20
+serial (inside playbook)  
+Run hosts in batches.
+
+yaml
+- hosts: webservers
+  serial: 2
+
+
+Error Handling
+--force-handlers  
+Run handlers even if a task fails.
+
+--skip-tags  
+Skip problematic tasks temporarily.
+
+ignore_errors: yes (inside playbook)
+Continue even if a task fails.
+
+
+##############
+# Resume from a failed task
+ansible-playbook deploy.yml --start-at-task="Configure DB"
+
+# Dry run with diff
+ansible-playbook site.yml --check --diff
+
+# Run only on failed hosts
+ansible-playbook site.yml --limit failed_hosts
+
+# Run only tasks tagged 'deploy'
+ansible-playbook site.yml --tags deploy
