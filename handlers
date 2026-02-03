@@ -23,3 +23,6 @@ handlers:
     service:
       name: postgresql
       state: restarted
+
+##Note
+Great choice— is one of those advanced Ansible features that makes handlers much more powerful. Normally, handlers run at the end of a play, but sometimes you need them to execute immediately after being notified. That’s exactly what  does.
