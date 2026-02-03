@@ -1,0 +1,15 @@
+Updates in Magic Variables
+Magic variables are special variables automatically available during playbook execution. In Ansible 2.20.x, they are stricter and more informative:
+- ansible_playbook_python → Path to the Python interpreter running the playbook.
+- ansible_playbook_path → Absolute path of the current playbook.
+- ansible_failed_task → Captures the last failed task for debugging.
+- ansible_run_tags → Shows which tags were applied during execution.
+- ansible_check_mode → Indicates if playbook is running in --check (dry-run).
+
+
+- name: Debug magic variables
+  debug:
+    msg: >
+      Playbook path: {{ ansible_playbook_path }}
+      Python used: {{ ansible_playbook_python }}
+      Tags applied: {{ ansible_run_tags }}
