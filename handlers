@@ -1,0 +1,25 @@
+tasks:
+  - name: Update configs
+    template:
+      src: app.conf.j2
+      dest: /etc/myapp/app.conf
+    notify:
+      - Restart App
+      - Restart Database
+
+  - name: Apply configs immediately
+    meta: flush_handlers
+
+  - name: Continue with deployment
+    command: /usr/local/bin/myapp deploy
+
+handlers:
+  - name: Restart App
+    service:
+      name: myapp
+      state: restarted
+
+  - name: Restart Database
+    service:
+      name: postgresql
+      state: restarted
