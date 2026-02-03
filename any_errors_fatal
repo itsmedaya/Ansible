@@ -1,0 +1,55 @@
+ Newer / Updated Error-Handling Features
+1. any_errors_fatal (Play-level)
+- If set to true, any error on any host stops the entire play immediately.
+- Useful for critical deployments where you don’t want partial success.
+Example:
+- hosts: webservers
+  any_errors_fatal: true
+  tasks:
+    - name: Deploy app
+      command: /usr/local/bin/deploy
+
+
+
+
+2. max_fail_percentage
+- Lets you tolerate a certain percentage of host failures before aborting the play.
+- Great for large clusters where a few failures are acceptable.
+Example:
+- hosts: all
+  max_fail_percentage: 20
+  tasks:
+    - name: Run update
+      yum:
+        name: myapp
+        state: latest
+
+
+👉 Play continues unless more than 20% of hosts fail.
+
+3. ignore_unreachable (Inventory/Play-level)
+- Newer option to ignore unreachable hosts instead of failing the play.
+- Useful in dynamic cloud environments where some nodes may be temporarily offline.
+
+4. Improved failed_when Logic
+- In 2.20.x, evaluation is stricter and more predictable.
+- You can now combine conditions with filters more safely.
+Example:
+- name: Check service health
+  command: /usr/local/bin/healthcheck
+  register: result
+  failed_when:
+    - result.rc != 0
+    - "'CRITICAL' in result.stdout"
+
+
+5. ignore_errors vs ignore_unreachable
+- ignore_errors: skips task failures.
+- ignore_unreachable: skips unreachable host failures.
+- Both now produce clearer CLI messages so you know what was skipped.
+
+6. Blocks with rescue + always
+- Still the main structured error handler.
+- In 2.20.x, error messages inside blocks are more detailed (task name, file, line).
+- Easier to debug complex rescue logic.
+
