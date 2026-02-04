@@ -1,0 +1,81 @@
+Ansible Variable Precedence (from lowest to highest)
+Here’s the simplified order (lowest priority first):
+
+Role defaults
+
+Defined in defaults/main.yml inside a role.
+
+Lowest priority, meant as safe fallbacks.
+
+Inventory variables
+
+From group_vars and host_vars.
+
+Group variables apply to all hosts in that group.
+
+Host variables override group variables.
+
+Playbook variables
+
+Defined directly in the playbook under vars:.
+
+Higher priority than inventory.
+
+Include/import vars
+
+Variables loaded via include_vars or vars_files.
+
+Extra vars from registered facts
+
+Facts gathered from hosts (ansible_facts).
+
+Can override inventory/playbook vars.
+
+
+Block vars
+
+Variables defined inside a block: section.
+
+Task vars
+
+Variables defined directly in a task.
+
+Role vars
+
+Defined in vars/main.yml inside a role.
+
+Higher priority than defaults.
+
+Include/import role vars
+
+Variables passed when including/importing roles.
+
+Command-line -e (extra-vars)
+
+Highest priority. Always wins, no matter what.
+
+--------------------------
+Suppose you define http_port in multiple places:
+
+defaults/main.yml → http_port: 80
+
+group_vars/webservers.yml → http_port: 8080
+
+Playbook vars: → http_port: 9090
+
+Run command → ansible-playbook site.yml -e "http_port=10000"
+
+👉 The final value used will be 10000, because extra-vars override everything.
+
+---------------------
+
+Lowest priority → Role defaults
+                  Inventory (group_vars, host_vars)
+                  Playbook vars
+                  Include/import vars
+                  Facts
+                  Block vars
+                  Task vars
+                  Role vars
+                  Include/import role vars
+Highest priority → Extra-vars (-e)
